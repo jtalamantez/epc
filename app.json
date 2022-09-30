@@ -1,32 +1,59 @@
 {
-  "expo": {
-    "name": "epc",
-    "slug": "epc",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+    "expo": {
+      "name": "EPC",
+      "slug": "epc",
+      "version": "1.0.5",
+      "orientation": "portrait",
+      "icon": "./exterior_assets/icon.png",
+      "splash": {
+        "image": "./exterior_assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#0c1e34"
+      },
+      "scheme": "epc",
+      "updates": {
+        "fallbackToCacheTimeout": 0
+      },
+      "assetBundlePatterns": [
+        "**/*"
+      ],
+      "packagerOpts": {
+          "sourceExts": [
+            "js",
+            "json",
+            "ts",
+            "tsx",
+            "jsx",
+            "vue"
+          ]
+        },
+      "ios": {
+        "bundleIdentifier": "com.epc.epcapp",
+        "supportsTablet": true,
+        "buildNumber": "1.0.5",
+        "infoPlist": {
+            "NSLocationAlwaysUsageDescription": "Find chefs or events in your area.",
+            "NSLocationWhenInUseUsageDescription": "Find chefs or events in your area."
+        },
+        "config": {
+            "googleSignIn": {
+                "reservedClientId": "com.googleusercontent.apps.37474980291-3lslvcsjoddq21tq150pr96v313g9tfe"
+            }
+        },
+        "googleServicesFile": "./GoogleService-Info.plist"
+      },
+      "android": {
+        "adaptiveIcon": {
+          "foregroundImage": "./exterior_assets/adaptive-icon.png",
+          "backgroundColor": "#FFFFFF"
+        },
+        "package": "net.agency22.epc",
+        "versionCode": 100050,
+        "googleServicesFile": "./google-services.json",
+        "permissions": []
+      },
+      "web": {
+        "favicon": "./exterior_assets/favicon.png"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
   }
 }
