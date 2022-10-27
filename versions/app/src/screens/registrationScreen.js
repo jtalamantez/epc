@@ -55,61 +55,10 @@ export default function RegistrationScreen({route,navigation}) {
     const [cvc, setCvc] = useState('')
 
     //PHONE VERIFICATION
-    const [modalVisible, setModalVisible] = useState(false);
-    const recaptchaVerifier = useRef(null);
-    const [phone, setPhone] = useState('')
-    const [verificationId, setVerificationId] = useState();
-    const [verificationCode, setVerificationCode] = useState();
+    const [modalVisible, setModalVisible] = useState(false)
+    const recaptchaVerifier = useRef(null)
 
-    
-
-    /*************************************************************/
-    // SIGNUP WITH PHONE
-    /*************************************************************/
-    const signupWithPhone = async () => {
-        if(fullName && phone && password){
-            const validated = true //await validateCreditCard()
-            if(!validated.error){
-                try {
-                    const phoneProvider = new firebase.auth.PhoneAuthProvider()
-                    const verificationId = await phoneProvider.verifyPhoneNumber('+1'+phone,recaptchaVerifier.current)
-                    setVerificationId(verificationId);
-                    setModalVisible(true)
-                } catch (err) {
-                    console.log("ERROR",err.message)
-                    Alert.alert("Error","Invalid phone number format. Please use 10 digits: xxx-xxx-xxxx")
-                }
-            }
-            else{
-                Alert.alert("Error",validated.error)
-            }
-        }
-        else{
-            let blank = ''
-            if(!fullName) blank += ' Name cannot be blank \r\n'
-            if(!phone) blank += ' Phone number cannot be blank \r\n'
-            if(!password) blank += ' Password cannot be blank \r\n'
-            Alert.alert("Error",blank)
-        }
-    }
-
-    const confirmCode = async () => {
-        setIsDisabled(true) //Disable resubmits
-        try {
-            const phoneCredential = await firebase.auth.PhoneAuthProvider.credential(verificationId,verificationCode)
-            const newUser = await firebase.auth().signInWithCredential(phoneCredential)
-            const uid = newUser.user.uid
-            console.log("New User ID:",uid)
-            const register = await completeRegistration(uid)
-        }
-        catch (error) {
-            console.log(error);
-            console.log('Invalid code what');
-            setIsDisabled(false)
-            alert("That verification code is invalid please try again");
-        }
-    }
-
+   
      
     /*************************************************************/
     // SIGNUP WITH EMAIL
@@ -135,53 +84,6 @@ export default function RegistrationScreen({route,navigation}) {
         }
     }
 
-    /*************************************************************/
-    // SIGNUP WITH GOOGLE
-    /*************************************************************/
-
-    /*
-    const signInAsync = async () => {
-        console.log("LoginScreen.js 6 | loggin in");
-        try {
-          const { type, accessToken, idToken, refreshToken, user } = await Google.logInAsync({
-            iosClientId: '303224229260-0l9dc3i70jg3upu0767f6agfbp1cjpg4.apps.googleusercontent.com',
-            //androidClientId: `<YOUR_ANDROID_CLIENT_ID>`,
-          });
-    
-          if (type === "success") {
-              console.log(type,type)
-              console.log(accessToken,accessToken)
-              console.log(idToken,idToken)
-              console.log(refreshToken,refreshToken)
-              console.log(user,user)
-            // Then you can use the Google REST API
-            console.log("LoginScreen.js 17 | success, navigating to profile");
-
-            let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-                headers: { Authorization: `Bearer ${accessToken}` },
-              });
-              console.log("userInfoResponse",userInfoResponse)
-
-              await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-              const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
-              console.log("credential",credential)
-
-              const googleProfileData = await firebase.auth().signInWithCredential(credential);
-              console.log("googleProfileData",googleProfileData)
-
-
-
-            }
-        } catch (error) {
-          console.log("LoginScreen.js 19 | error with login", error);
-          alert(error)
-        }
-      };
-*/
-
-
-
-
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
         {
           clientId: '303224229260-hmq2f3de692741h623p2v6180d0hdirk.apps.googleusercontent.com',
@@ -194,15 +96,11 @@ React.useEffect(() => {
     console.log("Use Effect called REGISTRATION")
     if (response?.type === 'success') {
         console.log("Respoonse",response)
-    
         const { id_token } = response.params;
         console.log(response.params)
 
-
         const provider = new firebase.auth.GoogleAuthProvider()
         //const provider = new GoogleAuthProvider();
-
-        
         
         const credential = provider.credential(id_token);
         console.log("CREDETNETILA",credential)
@@ -220,34 +118,6 @@ React.useEffect(() => {
 
 
 
-
-
-
-
-        /*
-    async signInWithGoogle() {
-        try {
-          const result = await Expo.Google.logInAsync({
-            androidClientId: androidClientId,
-            iosClientId: IOSClientId,
-            behavior: 'web',
-            iosClientId: '', //enter ios client id
-            scopes: ['profile', 'email']
-          });
-          
-          if (result.type  === 'success') {
-            await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
-            const googleProfileData = await firebase.auth().signInWithCredential(credential);
-            this.onLoginSuccess.bind(this);
-          }
-        } catch ({ message }) {
-          alert('login: Error:' + message);
-        }
-      }
-*/
-
-
     /*************************************************************/
     // FIREBASE REGISTRATION
     /*************************************************************/
@@ -257,6 +127,7 @@ React.useEffect(() => {
             id: uid,
             //phone: phone.replace(/[^\d]/g, ''), //remove () and all non-digits from phone number
             email: email,
+            isEmailVerified:false,
             name: fullName,
             password: await encryptPassword(password),
             createdAt: timestamp,
@@ -312,49 +183,36 @@ React.useEffect(() => {
         }
 
         //ADD USER TO CHEF/GUEST DB
-        const usersRef = firebase.firestore().collection(chosenFlow);
-        await usersRef.doc(uid).set(userData);
+        const usersRef = firebase.firestore().collection(chosenFlow)
+        await usersRef.doc(uid).set(userData)
 
         //ADD USER TO THE ALL USERS DB
-        const allUsersRef = firebase.firestore().collection('users');
-        await allUsersRef.doc(uid).set({createdAt: timestamp, user_type:chosenFlow});
+        const allUsersRef = firebase.firestore().collection('users')
+        await allUsersRef.doc(uid).set({createdAt: timestamp, user_type:chosenFlow})
 
-        //UPDATE CONTEXT VARS
-        appsGlobalContext.setUserID(uid)
-        appsGlobalContext.setUserData(userData)
-        
-        //Create customer account on server if needed
-        /*
+        //SEND VERIFICATION EMAIL
         try{
-            const cardHolder = await fetch(getEndpoint(appsGlobalContext,'stripe/customer'), {
+            const result = await fetch(getEndpoint(appsGlobalContext,'auth/send_verification'), {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    full_name: fullName,
-                    phone: phone,
-                    number: number,
-                    expiration: expiration,
-                    cvc: cvc,
+                    id: uid,
+                    email: email,
+                    type: chosenFlow,
                 })
             });
-            const stripe_info = await cardHolder.json();
-            if(!stripe_info.error){
-                //Add the new stripe to user data and create the user in the DB
-                const usersRef = firebase.firestore().collection('users');
-                userData.stripe_info = stripe_info
-                const snapshot = await usersRef.doc(uid).set(userData);
-                appsGlobalContext.setUserID(uid)
-            }
-            console.log("Added")
         }
         catch(error){
-            console.log(error);
-        }
-        */
+            console.log('Email verification error',error);
+        }   
 
+        //UPDATE CONTEXT VARS
+        appsGlobalContext.setUserID(uid)
+        appsGlobalContext.setUserData(userData)
+        appsGlobalContext.setUserLoggedIn(true)
     }
 
      

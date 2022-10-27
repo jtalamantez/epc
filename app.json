@@ -2,7 +2,7 @@
     "expo": {
       "name": "EPC",
       "slug": "epc",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "orientation": "portrait",
       "icon": "./exterior_assets/icon.png",
       "splash": {
@@ -30,7 +30,7 @@
       "ios": {
         "bundleIdentifier": "com.epc.epcapp",
         "supportsTablet": true,
-        "buildNumber": "1.0.5",
+        "buildNumber": "1.0.6",
         "infoPlist": {
             "NSLocationAlwaysUsageDescription": "Find chefs or events in your area.",
             "NSLocationWhenInUseUsageDescription": "Find chefs or events in your area."
@@ -48,7 +48,7 @@
           "backgroundColor": "#FFFFFF"
         },
         "package": "net.agency22.epc",
-        "versionCode": 100050,
+        "versionCode": 100060,
         "googleServicesFile": "./google-services.json",
         "permissions": []
       },

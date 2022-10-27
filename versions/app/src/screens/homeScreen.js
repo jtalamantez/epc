@@ -31,6 +31,8 @@ export default function HomeScreen({navigation}) {
     const uid = appsGlobalContext.userID
     const [refreshing, setRefreshing] = useState(false);
     const [user,setUserData] = useState(false)
+    const [emailIsNotVerified,setEmailIsNotVerified] = useState(false)
+    
     
     /*************************************************************/
     // GET USER DATA TO RENDER PAGE WITH
@@ -42,25 +44,16 @@ export default function HomeScreen({navigation}) {
         if (firebaseUser.exists) {
             let userData = firebaseUser.data()
             console.log("Setting new user data")
+            console.log("Is this user verified?")
+            if(_.has(userData,'isEmailVerified') && userData.isEmailVerified == false){
+                console.log("They are not verified, show the verification page")
+                setEmailIsNotVerified(true)
+            }
+            else{
+                setEmailIsNotVerified(false)
+            }
             appsGlobalContext.setUserData(userData)
             setUserData(userData);
-            //Setup an observer
-            /*
-            const observer = firebaseUser.onSnapshot(snapshot => {
-                console.log('APP Received query'+snapshot.size);
-                if (!snapshot.empty) {
-                    let userData = firebaseUser.data();
-                    //Set user data throughout page
-                    console.log("Accounts found user dtata",userData)
-                    setUserData(userData);
-                }
-                else{
-                    console.log("SNAPSHOT EMPTY")
-                }
-            }, err => {
-                console.log('Encountered error: ${err}');
-            });
-            */
         }
         else{
             console.log("No user found",uid)
@@ -68,6 +61,9 @@ export default function HomeScreen({navigation}) {
         }
     }
 
+    const checkForVerifiedEmail = () => {
+        getUserData(uid)
+    }
 
     const onRefresh = () => {
         getUserData(uid)
@@ -84,6 +80,7 @@ export default function HomeScreen({navigation}) {
     useFocusEffect(
         React.useCallback(() => {
             console.log("Home screen is focused")
+            getUserData(uid)
         }, [1])
     )
 
@@ -107,12 +104,19 @@ export default function HomeScreen({navigation}) {
                         </View>
                         <Text style={styles.featured_content}>$0</Text>
                     </View>
-                    <View style={globalStyles.card}>
-                        <View style={[globalStyles.card_header,styles.divider]}>
-                            <Text style={globalStyles.h3}>Upcoming Events</Text>
+
+                    {emailIsNotVerified && 
+                        <View style={globalStyles.card}>
+                            <View style={[globalStyles.card_header,styles.divider]}>
+                                <Text style={[globalStyles.h3]}>Email Not Verified</Text>
+                            </View>
+                            <TouchableOpacity style={styles.navigate_away} onPress={() => checkForVerifiedEmail()}>
+                                <Text style={[styles.navigate_away_content]}>Click here if you have already verified your email.</Text>
+                                <AntDesign name="right" size={20} color={Theme.FAINT} style={{paddingLeft:5}}/>
+                            </TouchableOpacity>
                         </View>
-                        <Text style={globalStyles.card_content}>No upcoming events</Text>
-                    </View>
+                    }
+
                     {_.has(user,'isOnboarded') && user.isOnboarded === true
                         ? <>
                             {/*

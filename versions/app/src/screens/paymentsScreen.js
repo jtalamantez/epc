@@ -297,23 +297,6 @@ export default function PaymentScreen({route,navigation}) {
 }
 
 const styles = StyleSheet.create({
-    logos: {
-        alignItems: 'center',
-        justifyContent:'center',
-        paddingTop:130,
-        //fontFamily: Theme.FONT_STANDARD,
-    },
-    hogsalt_logo: {
-        width:239,
-        height: 33,
-        alignSelf: "center",
-    },
-    loyalty_logo: {
-        width:156,
-        height: 27,
-        alignSelf: "center",
-        marginTop:20
-    },
     buttons: {
         flexDirection:'row',
         alignItems: 'center',

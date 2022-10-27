@@ -80,7 +80,7 @@ export default function ContactScreen({navigation}) {
                 </View>
             </KeyboardAwareScrollView>
         </SafeAreaView>
-  )
+    )
 }
 
 const styles = StyleSheet.create({

@@ -59,8 +59,6 @@ import MessageScreen from '../screens/messageScreen'
 import ReferScreen from '../screens/referScreen'
 import PaymentsScreen from '../screens/paymentsScreen'
 
-
-
 import WaiverScreen from '../screens/waiverScreen'
 import BackgroundCheckScreen from '../screens/backgroundCheckScreen'
 import ResumeScreen from '../screens/resumeScreen'
@@ -68,15 +66,9 @@ import FoodHandlerScreen from '../screens/foodHandlerScreen'
 import LicenseScreen from '../screens/licenseScreen'
 import SanitationScreen from '../screens/sanitationScreen'
 import LiabilityScreen from '../screens/liabilityScreen'
-
-
-
 import ContactScreen from '../screens/contactScreen'
 import FaqScreen from '../screens/faqScreen'
 import PlaygroundScreen from '../screens/playgroundScreen'
-
-
-
 
 
 /*** UNAUTHORIZED ****/
@@ -85,7 +77,6 @@ import RegistrationScreen from '../screens/registrationScreen'
 import LoginScreen from '../screens/loginScreen'
 import PasswordScreen from '../screens/passwordScreen'
 import TermsScreen from '../screens/termsScreen'
-import { create } from 'underscore';
 
 
 /*******************************************************************************/
@@ -374,7 +365,7 @@ const AuthorizedStack = () => {
                         <MaterialIcons name="person" size={20} color={focused ? color : Theme.WHITE} style={styles.tabBarIcon} />
                     )
                 })}/>
-        </AuthorizedStackNav.Navigator>       
+        </AuthorizedStackNav.Navigator>      
     )
 }
 

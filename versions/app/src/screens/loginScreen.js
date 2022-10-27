@@ -34,45 +34,6 @@ export default function LoginScreen({route,navigation}) {
     const [hide_password,toggleShowPassword] = useState(true)
     const [focusName, setFocusName] = useState(null)
 
-    /*****************************************************/
-    // LOGIN WITH PHONE
-    /*****************************************************/
-    const loginWithPhone = async () => {
-        if(phone && password){
-            try{
-                const result = await fetch(getEndpoint(appsGlobalContext,'auth/login_with_phone'), {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        phone: phone,
-                        password: password,
-                    })
-                });
-                if (result.status >= 400 && result.status < 600) {
-                    throw new Error("Bad response from server");
-                }
-                const usertoken = await result.text();
-                firebase.auth().signInWithCustomToken(usertoken).then((userCredential) => {
-                    // Signed in
-                    var user = userCredential.user;
-                })
-                .catch((error) => {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    // ...
-                });
-            }
-            catch(error){
-                Alert.alert("Phone and password not combination not located. Please try again.")
-            }
-        }
-        else{
-            Alert.alert("Please add a mobile number and a password")
-        }
-    }
 
     /*****************************************************/
     // LOGIN WITH EMAIL

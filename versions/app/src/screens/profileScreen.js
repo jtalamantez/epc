@@ -36,7 +36,8 @@ export default function ProfileScreen({navigation}) {
         const usersRef = firebase.firestore().collection('chefs');
         await usersRef.doc(uid).update({...values});
         await getUserData(uid)
-        navigation.goBack()
+        navigation.navigate('Dashboard')
+        setModalVisible(false)
     }
 
     async function getUserData(uid) {
@@ -44,12 +45,13 @@ export default function ProfileScreen({navigation}) {
         const user = await usersRef.doc(uid).get();
         if (user.exists) {
             appsGlobalContext.setUserData(user.data())
+            appsGlobalContext.setUserLoggedIn(true)
         }
     }
 
     useEffect(() => {
         getUserData(uid)
-    }, [])
+    }, [appsGlobalContext.userLoggedIn])
 
     return (
         <SafeAreaView style={globalStyles.safe_light}>

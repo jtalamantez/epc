@@ -47,11 +47,6 @@ const styles = StyleSheet.create({
         paddingTop:130,
         //fontFamily: Theme.FONT_STANDARD,
     },
-    hogsalt_logo: {
-        width:239,
-        height: 33,
-        alignSelf: "center",
-    },
     loyalty_logo: {
         width:156,
         height: 27,

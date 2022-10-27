@@ -11,6 +11,7 @@ import _ from 'underscore'
 import { Formik, useFormikContext, Field } from 'formik'
 import * as yup from 'yup'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { MultiSelect } from 'react-native-element-dropdown';
 
 
 // COMPONENTS
@@ -23,7 +24,7 @@ const windowHeight = Dimensions.get('window').height;
 // STYLES
 import { globalStyles, modal, footer, forms } from '../styles/styles';
 import Theme from '../styles/theme.style.js';
-import { FontAwesome, FontAwesome5, Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 
 /*******************************************************************************/
 // MAIN EXPORT FUNCTION
@@ -31,13 +32,113 @@ import { FontAwesome, FontAwesome5, Ionicons, AntDesign, MaterialIcons } from '@
 
 export default function ProfileSlider({handleFormUpdates,userData}) {
 
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-    console.log("Profile Slider Data",userData)
+
+    const DATA = [
+        { label: 'African', value: 'African' },
+        { label: 'Algerian', value: 'Algerian' },
+        { label: 'American', value: 'American' },
+        { label: 'Asian', value: 'Asian' },
+        { label: 'Austrailian', value: 'Austrailian' },
+        { label: 'BBQ', value: 'BBQ' },
+        { label: 'Belgian', value: 'Belgian' },
+        { label: 'Brazilian', value: 'Brazilian' },
+        { label: 'British', value: 'British' },
+        { label: 'Brunch', value: 'Brunch' },
+        { label: 'Burritos', value: 'Burritos' },
+        { label: 'Cajun', value: 'Cajun' },
+        { label: 'Carribean', value: 'Carribean' },
+        { label: 'Chinese', value: 'Chinese' },
+        { label: 'Chocolate', value: 'Chocolate' },
+        { label: 'Cookies', value: 'Cookies' },
+        { label: 'Cuban', value: 'Cuban' },
+        { label: 'Cupcakes', value: 'Cupcakes' },
+        { label: 'Dessert', value: 'Dessert' },
+        { label: 'Dim Sum', value: 'Dim Sum' },
+        { label: 'Doughnuts', value: 'Doughnuts' },
+        { label: 'Drunk Food', value: 'Drunk Food' },
+        { label: 'Egyptian', value: 'Egyptian' },
+        { label: 'Empanadas', value: 'Empanadas' },
+        { label: 'Filipino', value: 'Filipino' },
+        { label: 'Fish & Chips', value: 'Fish & Chips' },
+        { label: 'Fondue', value: 'Fondue' },
+        { label: 'French', value: 'French' },
+        { label: 'Fried Chicken', value: 'Fried Chicken' },
+        { label: 'German', value: 'German' },
+        { label: 'Greek', value: 'Greek' },
+        { label: 'Habachi', value: 'Habachi' },
+        { label: 'Haitian', value: 'Haitian' },
+        { label: 'Haute', value: 'Haute' },
+        { label: 'Healthy', value: 'Healthy' },
+        { label: 'Indian', value: 'Indian' },
+        { label: 'Indonesian', value: 'Indonesian' },
+        { label: 'Irish', value: 'Irish' },
+        { label: 'Island', value: 'Island' },
+        { label: 'Italian', value: 'Italian' },
+        { label: 'Japanese', value: 'Japanese' },
+        { label: 'Jerk', value: 'Jerk' },
+        { label: 'Jewish', value: 'Jewish' },
+        { label: 'Korean', value: 'Korean' },
+        { label: 'Korean BBQ', value: 'Korean BBQ' },
+        { label: 'Korean Hot Pot', value: 'Korean Hot Pot' },
+        { label: 'Labanese', value: 'Labanese' },
+        { label: 'Late Night', value: 'Late Night' },
+        { label: 'Latvian', value: 'Latvian' },
+        { label: 'Libyan', value: 'Libyan' },
+        { label: 'Mediterranean', value: 'Mediterranean' },
+        { label: 'Mexican', value: 'Mexican' },
+        { label: 'Moroccan', value: 'Moroccan' },
+        { label: 'Nashville Hot Chicken', value: 'Nashville Hot Chicken' },
+        { label: 'New Zealand', value: 'New Zealand' },
+        { label: 'Nigerian', value: 'Nigerian' },
+        { label: 'Noodles', value: 'Noodles' },
+        { label: 'Omakase', value: 'Omakase' },
+        { label: 'Oysters', value: 'Oysters' },
+        { label: 'Pakistani', value: 'Pakistani' },
+        { label: 'Pasta', value: 'Pasta' },
+        { label: 'Peruvian', value: 'Peruvian' },
+        { label: 'Pho', value: 'Pho' },
+        { label: 'Pizza', value: 'Pizza' },
+        { label: 'Polish', value: 'Polish' },
+        { label: 'Portugese', value: 'Portugese' },
+        { label: 'Ramen', value: 'Ramen' },
+        { label: 'Russian', value: 'Russian' },
+        { label: 'Salvadoran', value: 'Salvadoran' },
+        { label: 'Seafood', value: 'Seafood' },
+        { label: 'Shellfish', value: 'Shellfish' },
+        { label: 'Sicilian', value: 'Sicilian' },
+        { label: 'Sous Vide', value: 'Sous Vide' },
+        { label: 'Smoothies', value: 'Smoothies' },
+        { label: 'South African', value: 'South African' },
+        { label: 'Southern BBQ', value: 'Southern BBQ' },
+        { label: 'Spanish Tapas', value: 'Spanish Tapas' },
+        { label: 'Sushi', value: 'Sushi' },
+        { label: 'Swedish', value: 'Swedish' },
+        { label: 'Sweets', value: 'Sweets' },
+        { label: 'Tacos', value: 'Tacos' },
+        { label: 'Tamales', value: 'Tamales' },
+        { label: 'Tex Mex', value: 'Tex Mex' },
+        { label: 'Thai', value: 'Thai' },
+        { label: 'Tibetan', value: 'Tibetan' },
+        { label: 'Turkish', value: 'Turkish' },
+        { label: 'United Kingdom', value: 'United Kingdom' },
+        { label: 'Vietnamese', value: 'Vietnamese' },
+        { label: 'Welsh', value: 'Welsh' },
+        { label: 'Wild Game', value: 'Wild Game' },
+    ];
+
+    const [cuisines, setCuisines] = useState([]);
+
+    const renderDataItem = (item) => {
+        return (
+            <View style={styles.item}>
+                <Text style={styles.selectedTextStyle}>{item.label}</Text>
+                <AntDesign style={styles.icon} color="black" name="check" size={20} />
+            </View>
+        );
+    };
 
 
-    const cuisines = [
-        'African','Algerian','American','Asian','Austrailian','BBQ','Belgian','Brazilian ','Breakfast','British','Brunch','Burritos','Cajun','Carribean','Chinese','Chocolate','Cookies','Cuban','Cupcakes','Dessert','Dim Sum','Donughts','Drunk Food','Egyptian','Empanadas','Filipino ','Fish & Chips','Fondue','French','Fried Chicken','German','Greek','Habachi','Haitian','Haute','Healthy','Indian','Indonesian','Irish','Island','Italian','Japanese','Jerk','Jewish','Korean','Korean BBQ','Korean Hot Pot','Labanese','Late Night','Latvian','Libyan','Mediterranean','Mexican','Moroccan ','Nashville Hot Chicken','New Zealand','Nigerian','Noodles','Omakase','Oysters','Pakistani','Pasta','Peruvian','Pho','Pizza','Polish','Portugese','Ramen','Russian','Salvadoran','Seafood','Shellfish','Sicilian','Sous Vide','Smoothies','South African','Southern BBQ','Spanish Tapas','Sushi','Swedish','Sweets','Tacos','Tamales','Tex Mex','Thai','Tibetan','Turkish','United Kingdom','Vietnamese','Welsh','Wild Game'
-    ]
+
 
     /***********************************************/
     // SAVE PROFILE IMAGE
@@ -172,128 +273,45 @@ export default function ProfileSlider({handleFormUpdates,userData}) {
                     
 
                     <View style={styles.screen}>
+
                         <Text style={[globalStyles.h1, styles.headline_text]}>Which cuisines do you serve, Chef?</Text>
                         <Text style={[globalStyles.subtitle, styles.subtitle_text]}> Tap any that apply</Text>
-                        <View style={styles.checkboxes}>
-                            {/*
-                            <View style={styles.checkbox_group}>
-                                <View style={styles.checkbox}>
-                                    <BouncyCheckbox 
-                                    isChecked={(values.cuisines && values.cuisines.american) ? true : false}
-                                    onPress={(isChecked) => {
-                                        console.log("Is american checked? ",isChecked)
-                                        let key = 'cuisines.american'
-                                        let value = (isChecked) ? 'american' : undefined
-                                        setFieldValue(key, value, false)
-                                    }}
-                                    style={styles.bouncy_checkbox}
-                                    fillColor={Theme.SECONDARY_COLOR}
-                                    iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
+                            <MultiSelect
+                                style={styles.dropdown}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                iconStyle={styles.iconStyle}
+                                data={DATA}
+                                labelField="label"
+                                valueField="value"
+                                placeholder="Cuisines"
+                                value={cuisines}
+                                search
+                                searchPlaceholder="Search..."
+                                onChange={item => {
+                                    setCuisines(item)
+                                    setFieldValue(cuisines,cuisines)
+                                    console.log("selected items",cuisines)
+                                }}
+                                renderLeftIcon={() => (
+                                    <MaterialCommunityIcons
+                                        style={styles.icon}
+                                        color="black"
+                                        name="silverware-fork-knife"
+                                        size={20}
                                     />
-                                    <Text>American</Text>
-                                </View>
-                                <View style={styles.checkbox}>
-                                    <BouncyCheckbox 
-                                        isChecked={(values.cuisines && values.cuisines.asian) ? true : false}
-                                        onPress={(isChecked) => {
-                                        let key = 'cuisines.asian'
-                                        let value = (isChecked) ? 'asian' : undefined
-                                        setFieldValue(key, value, false)
-                                    }}
-                                    style={styles.bouncy_checkbox}
-                                    fillColor={Theme.SECONDARY_COLOR}
-                                    iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
-                                    />
-                                    <Text>Asian</Text>
-                                </View>
-                                <View style={styles.checkbox}>
-                                    <BouncyCheckbox
-                                    isChecked={(values.cuisines && values.cuisines.chinese) ? true : false}
-                                    onPress={(isChecked) => {
-                                        let key = 'cuisines.chinese'
-                                        let value = (isChecked) ? 'chinese' : undefined
-                                        setFieldValue(key, value, false)
-                                    }}
-                                    style={styles.bouncy_checkbox}
-                                    fillColor={Theme.SECONDARY_COLOR}
-                                    iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
-                                    />
-                                    <Text>Chinese</Text>
-                                </View>
-                            </View>
-                            <View style={styles.checkbox_group}>
-                                <View style={styles.checkbox}>
-                                    <BouncyCheckbox
-                                    isChecked={(values.cuisines && values.cuisines.french) ? true : false}
-                                    onPress={(isChecked) => {
-                                        let key = 'cuisines.french'
-                                        let value = (isChecked) ? 'french' : undefined
-                                        setFieldValue(key, value, false)
-                                    }}
-                                    style={styles.bouncy_checkbox}
-                                    fillColor={Theme.SECONDARY_COLOR}
-                                    iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
-                                    />
-                                    <Text>French</Text>
-                                </View>
-                                <View style={styles.checkbox}>
-                                    <BouncyCheckbox
-                                    isChecked={(values.cuisines && values.cuisines.indian) ? true : false}
-                                    onPress={(isChecked) => {
-                                        let key = 'cuisines.indian'
-                                        let value = (isChecked) ? 'indian' : undefined
-                                        setFieldValue(key, value, false)
-                                    }}
-                                    style={styles.bouncy_checkbox}
-                                    fillColor={Theme.SECONDARY_COLOR}
-                                    iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
-                                    />
-                                    <Text>Indian</Text>
-                                </View>
-                                <View style={styles.checkbox}>
-                                    <BouncyCheckbox
-                                    isChecked={(values.cuisines && values.cuisines.italian) ? true : false}
-                                    onPress={(isChecked) => {
-                                        let key = 'cuisines.italian'
-                                        let value = (isChecked) ? 'italian' : undefined
-                                        setFieldValue(key, value, false)
-                                    }}
-                                    style={styles.bouncy_checkbox}
-                                    fillColor={Theme.SECONDARY_COLOR}
-                                    iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
-                                    />
-                                    <Text>Italian</Text>
-                                </View>
-                            </View>
-                            */}
-
-
-        <ScrollView style={{flexDirection:'column'}} contentContainerStyle={{}} scrollDire>
-            <View style={styles.long_list_group}>
-            { cuisines.map((cuisine,index) => {
-                    return(<View style={styles.checkbox} key={index}>
-                        <BouncyCheckbox 
-                        isChecked={(values.cuisines && values.cuisines[cuisine]) ? true : false}
-                        onPress={(isChecked) => {
-                            console.log("Is american checked? ",isChecked)
-                            let key = 'cuisines.'+cuisine
-                            let value = (isChecked) ? cuisine : undefined
-                            setFieldValue(key, value, false)
-                        }}
-                        style={styles.bouncy_checkbox}
-                        fillColor={Theme.SECONDARY_COLOR}
-                        iconStyle={{ borderColor: Theme.SECONDARY_COLOR}}
-                        />
-                        <Text>{cuisine}</Text>
-                    </View>)
-                })
-            }
-            </View>
-        </ScrollView>
-
-
-
-                        </View>
+                                )}
+                                renderItem={renderDataItem}
+                                renderSelectedItem={(item, unSelect) => (
+                                    <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+                                        <View style={styles.selectedStyle}>
+                                            <Text style={styles.textSelectedStyle}>{item.label}</Text>
+                                            <AntDesign color="black" name="delete" size={17} />
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                            />
                     </View>
 
                     {/***************   
@@ -457,5 +475,81 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%'
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+    dropdown: {
+        height: 50,
+        marginTop:30,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 12,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+
+        elevation: 2,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+    },
+    selectedTextStyle: {
+        fontSize: 14,
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+    },
+    icon: {
+        marginRight: 5,
+    },
+    item: {
+        padding: 17,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    selectedStyle: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 14,
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        marginTop: 8,
+        marginRight: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+
+        elevation: 2,
+    },
+    textSelectedStyle: {
+        marginRight: 5,
+        fontSize: 16,
     },
 })
